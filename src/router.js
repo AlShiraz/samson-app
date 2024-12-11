@@ -16,11 +16,11 @@ export default createRouter({
         beforeEnter: async (to, from, next) => {
             const token = localStorage.getItem('auth_token');
             const exp = localStorage.getItem('auth_exp');
-            const currentTime = Math.floor(Date.now() / 1000);
+            const currentTime = Math.floor(Date.now());
     
             if (token && exp > currentTime) {
               next();
-            } else if (token && exp <= currentTime) {
+            } else if (token && exp <= currentTime) {   
               try {
                 await refreshAuthToken();
                 next();
@@ -39,7 +39,6 @@ export default createRouter({
 async function refreshAuthToken() {
     const token = localStorage.getItem('auth_token');
     if (!token) throw new Error('No token found');
-    alert(token)
   
     const response = await axios.post('http://188.243.82.176:8005/refresh', null, {
       headers: { Authorization: `Bearer ${token}` },
